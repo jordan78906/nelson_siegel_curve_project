@@ -1,51 +1,151 @@
+# Data manipulation
 import numpy as np
 import pandas as pd
 from scipy import stats
 
+# Visualization tools
 import seaborn as sns
 import plotly.express as px
 import matplotlib.pyplot as plt
 
+# Web App tool
+import streamlit as st
 
-#import math 
-#import streamlit as st      Implement at end
+st.title ('Nelson Siegel Svensson Model')
 
 
-def nelson_siege_formula (B_0, B_1, B_2, L, T):
-    # B_0   level =  
-    # B_1   slope = 
-    # B_2   shape = 
-    # L     lambda= 
-    # T     time  = Maturity
-    yield_pct = B_0 + B_1((1 - np.exp(-L * T))/ L * T) + B_2((1 - np.exp(-L * T))/(L * T) - np.exp(-L * T))
-    return yield_pct, T
-
+def nelson_siege_formula (B_0, B_1, B_2, B_3, L, mu, T):
+    # B_0   level =  long term value (interest rates, ex: 5% = 0.050)
+    # B_1   slope =  yield curve (0.01 = inverter curve/ -0.01 = normal curve)
+    # B_2   shape =  max/min (hump) at a particular maturity
+    # L     lambda=  decay, exponential decay, model flexible shape, later hump
+    #yield_pct = B_0 + B_1((1 - np.exp(-L * T))/ L * T) + B_2((1 - np.exp(-L * T))/(L * T) - np.exp(-L * T))
+    exp_input = ((-L) * T)
+    mu_input = ((-mu) * T)
+    yield_pct = B_0 + B_1 * ((1 - np.exp(exp_input))/(L * T)) + B_2 * ((1 - np.exp(exp_input))/(L * T) - np.exp(exp_input)) + B_3 * ((1 - np.exp(mu_input))/(mu * T) - np.exp(mu_input))
+    #print (yield_pct)
+    return yield_pct
 
 def buy_price(maturity, cupon, yield_pct, price, T): 
     value = 100/((1 + yield_pct ) ** maturity) + (cupon/T)
     return value
 
+
+###########################
 #Hard coded values for now
-B_0 = 0.0000
-B_1 = 0.0000
-B_2 = 0.0000
-L   = 0.0000
-T   = 30
+
 T_bond   = 10
 ###########################
 
+st.sidebar.header('Model Parameters')
+st.sidebar.write('Adjust the parameters for the Nelson Siegel Svensson model.')
+
+B_0 = st.sidebar.number_input(
+    'B0 - Level (e.g., 0.015 for 1.5%)',
+    value=0.050,
+    format="%.4f"
+)
+
+B_1 = st.sidebar.number_input(
+    'B1 - Slope (e.g., 0.013 for 1.3%)',
+    value=0.013,
+    format="%.4f"
+)
+
+B_2 = st.sidebar.number_input(
+    'B2 - Shape (e.g., 0.015 for 1.5%)',
+    value=0.050,
+    format="%.4f"
+)
+
+B_3 = st.sidebar.number_input(
+    'B3 - Shape (e.g., 0.013 for 1.3%)',
+    value=0.013,
+    format="%.4f"
+)
+
+L = st.sidebar.number_input(
+    'Lambda - Decay (e.g., 0.015 for 1.5%)',
+    value=0.050,
+    format="%.4f"
+)
+
+mu = st.sidebar.number_input(
+    'Mu - Decay (e.g., 0.013 for 1.3%)',
+    value=0.013,
+    format="%.4f"
+)
+
+T = st.sidebar.number_input(
+    'Maturity (e.g., 1 for 1 year)',
+    value=30,
+    format="%d"
+)
+
+# Nelson Siegel Formula
+# Graph: y-axis = yield | x-axis = maturity
+x_values = []
+y_values = []
+
+for i in range (1, (T + 1)):
+    x_values.append(nelson_siege_formula(B_0, B_1, B_2, B_3, L, mu, i))
+    y_values.append(i)
+
+fig , ax = plt.subplots()
+ax.plot(y_values, x_values)
+ax.set_xlabel('Maturity')
+ax.set_ylabel('Yield')
+ax.set_title('Yield Curve')
+
+st.pyplot(fig)
+
+st.title ('Price Data')
+########################################################################################
+# Injest data
 test_raw = pd.read_csv('./nelson_siegel_curve_project/Test_data.csv')
+# print (f'\nShape:{test_raw.shape}\n')
+st.write(test_raw.head(10))
 
-print (f'\nShape:{test_raw.shape}\n')
-print (test_raw.head(10))
 
-#dict_yield = {}
-#for i in range (1, 31):
-#    dict_yield [i] = 0.0000
+# Pricce Curve
+# Graph: y-axis = yield | x-axis = maturity
+z_values = []
+#st.write(test_raw.loc[:,'Maturity'])
+#st.write(test_raw.loc[:,'Coupon'])
+#st.write(test_raw.loc[:,'Price'])
+#print(test_raw.loc[:,'Price'])
+maturity = test_raw.loc[:,'Maturity']
+coupon = test_raw.loc[:,'Coupon']
+price = test_raw.loc[:,'Price']
 
-#print (data_df)
+#print(maturity[0])
 
-#for v in range (1, 31):
-#    print (f"{v}      {dict_yield[v]}")
+for v in range (0, T_bond):
+    #print(maturity[v])
+    a = maturity[v]
+    b = coupon[v]
+    c = price[v]
+    d = x_values[v]
+    z_values.append(buy_price(a, b, d, c, v+1))
+    #y_values.append(i)
 
-print(np.__version__)
+
+st.title ('Bond Value')
+new_test = test_raw
+new_test['Value'] = z_values
+st.write(new_test.head(10))
+
+#fig , ax = plt.subplots()
+#ax.plot(y_values, x_values)
+#ax.set_xlabel('Maturity')
+#ax.set_ylabel('Yield')
+#ax.set_title('Yield Curve')
+
+#st.pyplot(fig)
+
+
+
+
+
+st.write("---")
+st.markdown("Created by Jordan Hernandez-Almache  |   [LinkedIn](https://www.linkedin.com/in/jordan-hernandez-almache/)")
