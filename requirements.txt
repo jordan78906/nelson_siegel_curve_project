@@ -1,8 +1,7 @@
-python>=3.13.7
 streamlit
 scipy
 numpy
 pandas
 seaborn
-plotly.express
-matplotlib.pyplot
+plotly
+matplotlib
