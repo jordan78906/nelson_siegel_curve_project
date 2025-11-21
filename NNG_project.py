@@ -107,10 +107,14 @@ st.title ('Price Data')
 
 uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
 if uploaded_file is not None:
-    test_raw = pd.read_csv(uploaded_file)
-# print (f'\nShape:{test_raw.shape}\n')
-st.write(test_raw.head(10))
-
+    try:
+        test_raw = pd.read_csv(uploaded_file)
+        # print (f'\nShape:{test_raw.shape}\n')
+        st.write(test_raw.head(10))
+    except Exception as e:
+        st.error(f"Error loading CSV file: {e}")
+else:
+    st.info("Please upload a CSV file to begin.")
 
 # Pricce Curve
 # Graph: y-axis = yield | x-axis = maturity
