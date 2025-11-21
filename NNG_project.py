@@ -103,7 +103,11 @@ st.pyplot(fig)
 st.title ('Price Data')
 ########################################################################################
 # Injest data
-test_raw = pd.read_csv('./nelson_siegel_curve_project/Test_data.csv')
+#test_raw = pd.read_csv('./nelson_siegel_curve_project/Test_data.csv')
+
+uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+if uploaded_file is not None:
+    test_raw = pd.read_csv(uploaded_file)
 # print (f'\nShape:{test_raw.shape}\n')
 st.write(test_raw.head(10))
 
