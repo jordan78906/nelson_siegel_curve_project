@@ -1,5 +1,5 @@
 streamlit
-scipy
+scipy>=1.10
 numpy
 pandas
 seaborn
