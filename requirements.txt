@@ -3,5 +3,5 @@ scipy
 numpy
 pandas
 seaborn
-plotly.express
-matplotlib.pyplot
+plotly
+matplotlib
