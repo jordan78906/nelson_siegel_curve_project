@@ -1,6 +1,7 @@
 # Data manipulation
 import numpy as np
 import pandas as pd
+import scipy
 from scipy import stats
 
 # Visualization tools
