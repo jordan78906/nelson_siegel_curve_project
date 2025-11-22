@@ -41,6 +41,11 @@ T_bond   = 10
 st.sidebar.header('Model Parameters')
 st.sidebar.write('Adjust the parameters for the Nelson Siegel Svensson model.')
 
+st.sidebar.write("--------------------")
+st.sidebar.markdown("Created by Jordan Hernandez-Almache  |   [LinkedIn](https://www.linkedin.com/in/jordan-hernandez-almache/)")
+st.sidebar.write("--------------------")
+
+
 B_0 = st.sidebar.number_input(
     'B0 - Level (e.g., 0.015 for 1.5%)',
     value=0.050,
@@ -102,59 +107,64 @@ st.pyplot(fig)
 
 st.title ('Price Data')
 ########################################################################################
-# Injest data
-#test_raw = pd.read_csv('./nelson_siegel_curve_project/Test_data.csv')
-
+# Upload File
 uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+
+#Check if file was uploaded
 if uploaded_file is not None:
     try:
         test_raw = pd.read_csv(uploaded_file)
         # print (f'\nShape:{test_raw.shape}\n')
         st.write(test_raw.head(10))
+        
+        ### Price Curve
+        # Seperating Column values into lists
+        z_values = []
+        maturity = test_raw.loc[:,'Maturity']
+        coupon = test_raw.loc[:,'Coupon']
+        price = test_raw.loc[:,'Price']
+
+        # Iterating through column values to calculate Bond Value
+        for v in range (0, T_bond):
+            a = maturity[v]
+            b = coupon[v]
+            c = price[v]
+            d = x_values[v]
+            z_values.append(buy_price(a, b, d, c, v+1))
+
+        # Bond Value Output
+        st.title ('Bond Value')
+        new_test = test_raw
+        new_test['Value'] = z_values
+        st.write(new_test.head(10))
+
     except Exception as e:
         st.error(f"Error loading CSV file: {e}")
 else:
     st.info("Please upload a CSV file to begin.")
 
-# Pricce Curve
-# Graph: y-axis = yield | x-axis = maturity
+'''
+### Price Curve
+# Seperating Column values into lists
 z_values = []
-#st.write(test_raw.loc[:,'Maturity'])
-#st.write(test_raw.loc[:,'Coupon'])
-#st.write(test_raw.loc[:,'Price'])
-#print(test_raw.loc[:,'Price'])
 maturity = test_raw.loc[:,'Maturity']
 coupon = test_raw.loc[:,'Coupon']
 price = test_raw.loc[:,'Price']
 
-#print(maturity[0])
-
+# Iterating through column values to calculate Bond Value
 for v in range (0, T_bond):
-    #print(maturity[v])
     a = maturity[v]
     b = coupon[v]
     c = price[v]
     d = x_values[v]
     z_values.append(buy_price(a, b, d, c, v+1))
-    #y_values.append(i)
 
-
+# Bond Value Output
 st.title ('Bond Value')
 new_test = test_raw
 new_test['Value'] = z_values
 st.write(new_test.head(10))
-
-#fig , ax = plt.subplots()
-#ax.plot(y_values, x_values)
-#ax.set_xlabel('Maturity')
-#ax.set_ylabel('Yield')
-#ax.set_title('Yield Curve')
-
-#st.pyplot(fig)
-
-
-
-
+'''
 
 st.write("---")
 st.markdown("Created by Jordan Hernandez-Almache  |   [LinkedIn](https://www.linkedin.com/in/jordan-hernandez-almache/)")
