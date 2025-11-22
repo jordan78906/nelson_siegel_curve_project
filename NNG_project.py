@@ -12,35 +12,34 @@ import matplotlib.pyplot as plt
 # Web App tool
 import streamlit as st
 
-st.title ('Nelson Siegel Svensson Model')
-
-
 def nelson_siege_formula (B_0, B_1, B_2, B_3, L, mu, T):
     # B_0   level =  long term value (interest rates, ex: 5% = 0.050)
     # B_1   slope =  yield curve (0.01 = inverter curve/ -0.01 = normal curve)
     # B_2   shape =  max/min (hump) at a particular maturity
+    # B_3   shape =  
     # L     lambda=  decay, exponential decay, model flexible shape, later hump
-    #yield_pct = B_0 + B_1((1 - np.exp(-L * T))/ L * T) + B_2((1 - np.exp(-L * T))/(L * T) - np.exp(-L * T))
+    # mu    mu    =  decay
+    
     exp_input = ((-L) * T)
     mu_input = ((-mu) * T)
     yield_pct = B_0 + B_1 * ((1 - np.exp(exp_input))/(L * T)) + B_2 * ((1 - np.exp(exp_input))/(L * T) - np.exp(exp_input)) + B_3 * ((1 - np.exp(mu_input))/(mu * T) - np.exp(mu_input))
-    #print (yield_pct)
     return yield_pct
 
 def buy_price(maturity, cupon, yield_pct, price, T): 
     value = 100/((1 + yield_pct ) ** maturity) + (cupon/T)
     return value
 
-
-###########################
-#Hard coded values for now
-
+########################################################################################
+# Web GUI code
+# Askes for B0, B1, B2, B3, Lambda (L), mu, maturity (T)
+# Provides a graph of Nelson Siegel Svensson Formula
+# (NEXT UPDATE) Hard coded values for now, make adjustable.
 T_bond   = 10
-###########################
+########################################################################################
+st.title ('Nelson Siegel Svensson Model')
 
 st.sidebar.header('Model Parameters')
 st.sidebar.write('Adjust the parameters for the Nelson Siegel Svensson model.')
-
 st.sidebar.write("--------------------")
 st.sidebar.markdown("Created by Jordan Hernandez-Almache  |   [LinkedIn](https://www.linkedin.com/in/jordan-hernandez-almache/)")
 st.sidebar.write("--------------------")
@@ -106,6 +105,14 @@ ax.set_title('Yield Curve')
 st.pyplot(fig)
 
 st.title ('Price Data')
+
+########################################################################################
+# MAIN CODE
+# Uploading csv file
+# Formating data
+# Calcuating Bond value: depending on inputs from web inputs, 
+# Nelson Siegel Svensson Formula, and data.
+# (NEXT UPDATE) Providig output csv file 
 ########################################################################################
 # Upload File
 uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
