@@ -143,28 +143,5 @@ if uploaded_file is not None:
 else:
     st.info("Please upload a CSV file to begin.")
 
-'''
-### Price Curve
-# Seperating Column values into lists
-z_values = []
-maturity = test_raw.loc[:,'Maturity']
-coupon = test_raw.loc[:,'Coupon']
-price = test_raw.loc[:,'Price']
-
-# Iterating through column values to calculate Bond Value
-for v in range (0, T_bond):
-    a = maturity[v]
-    b = coupon[v]
-    c = price[v]
-    d = x_values[v]
-    z_values.append(buy_price(a, b, d, c, v+1))
-
-# Bond Value Output
-st.title ('Bond Value')
-new_test = test_raw
-new_test['Value'] = z_values
-st.write(new_test.head(10))
-'''
-
 st.write("---")
 st.markdown("Created by Jordan Hernandez-Almache  |   [LinkedIn](https://www.linkedin.com/in/jordan-hernandez-almache/)")
