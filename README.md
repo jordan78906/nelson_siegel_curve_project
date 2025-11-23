@@ -12,7 +12,12 @@ A Python application that visualizes the bond yield curve using the nelson siege
 $`(t) = \beta_0 + \beta_1 \left( \frac{1 - e^{ \text{-} \lambda t} }{ \lambda t } \right) + \beta_2 \left( \frac{1 - e^{ \text{-} \lambda t}}{ \lambda t} - e^{\text{-} \lambda t} \right) + \beta_3 \left( \frac{ 1 - e^{\text{-} \mu t} }{ \mu t } - e^{ \text{-} \mu t} \right) `$
 - **Interactive 2D Nelson Siegel Svensson Graph**: View bond yield percentage over varying inputs and time to maturity.
 - **Real-Time Data**: The app allows for csv input data file.
-- **Adjustable $`\beta_0`$**: Long term value 
+- **Adjustable $`\beta_0`$**: Long term value.
+- **Adjustable $`\beta_1`$**: Inverted Curve/Normal Curve.
+- **Adjustable $`\beta_2`$**: Max/Min hump at a earlier maturity.
+- **Adjustable $`\beta_3`$**: Max/Min hump at a later maturity.
+- **Adjustable $`\lamnda`$**: Decay, exponential decay, model flexible shape
+- **Adjustable $`\mu`$**: Decay  
 - **User-Friendly Design**: Built with Streamlit for an accessible and responsive interface.
 
 ## Libraries Used
