@@ -16,7 +16,7 @@ $`(t) = \beta_0 + \beta_1 \left( \frac{1 - e^{ \text{-} \lambda t} }{ \lambda t 
 - **Adjustable $`\beta_1`$**: Inverted Curve/Normal Curve.
 - **Adjustable $`\beta_2`$**: Max/Min hump at a earlier maturity.
 - **Adjustable $`\beta_3`$**: Max/Min hump at a later maturity.
-- **Adjustable $`\lamnda`$**: Decay, exponential decay, model flexible shape
+- **Adjustable $`\lambda`$**: Decay, exponential decay, model flexible shape
 - **Adjustable $`\mu`$**: Decay  
 - **User-Friendly Design**: Built with Streamlit for an accessible and responsive interface.
 
