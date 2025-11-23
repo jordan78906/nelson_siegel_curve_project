@@ -17,7 +17,8 @@ $`(t) = \beta_0 + \beta_1 \left( \frac{1 - e^{ \text{-} \lambda t} }{ \lambda t 
 - **Adjustable $`\beta_2`$**: Max/Min hump at a earlier maturity.
 - **Adjustable $`\beta_3`$**: Max/Min hump at a later maturity.
 - **Adjustable $`\lambda`$**: Decay, exponential decay, model flexible shape
-- **Adjustable $`\mu`$**: Decay  
+- **Adjustable $`\mu`$**: Decay
+- **Adjustable $`t`$**: Maturity  
 - **User-Friendly Design**: Built with Streamlit for an accessible and responsive interface.
 
 ## Libraries Used
